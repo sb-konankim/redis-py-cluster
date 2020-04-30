@@ -214,6 +214,7 @@ class RedisCluster(Redis):
                 **kwargs
             )
 
+        print(kwargs)
         super(RedisCluster, self).__init__(connection_pool=pool, **kwargs)
 
         self.refresh_table_asap = False
@@ -252,8 +253,9 @@ class RedisCluster(Redis):
             connection_pool_cls = ClusterConnectionPool
 
         if url.startswith('rediss://'):
-            connection_pool = connection_pool_cls.from_url(url, db=db, connection_class=SSLClusterConnection,
-                                                           skip_full_coverage_check=skip_full_coverage_check, **kwargs)
+            connection_pool = connection_pool_cls.from_url(url, db=db,
+                                                           skip_full_coverage_check=skip_full_coverage_check,
+                                                           connection_class=SSLClusterConnection, **kwargs)
         else:
             connection_pool = connection_pool_cls.from_url(url, db=db, skip_full_coverage_check=skip_full_coverage_check, **kwargs)
 
