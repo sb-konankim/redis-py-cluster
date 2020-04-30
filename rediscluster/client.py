@@ -388,16 +388,11 @@ class RedisCluster(Redis):
         else:
             connection_pool_cls = ClusterConnectionPool
 
-
+        connection_pool = connection_pool_cls.from_url(url, db=db,
+                                                       skip_full_coverage_check=skip_full_coverage_check, **kwargs)
         if url.startswith('rediss://'):
-            connection_pool = connection_pool_cls.from_url(url,
-                                                           db=db,
-                                                           skip_full_coverage_check=skip_full_coverage_check,
-                                                           connection_class=SSLClusterConnection,
-                                                           **kwargs)
-        else:
-            connection_pool = connection_pool_cls.from_url(url, db=db,
-                                                           skip_full_coverage_check=skip_full_coverage_check, **kwargs)
+            connection_pool.connection_class = SSLClusterConnection
+
         return cls(connection_pool=connection_pool, skip_full_coverage_check=skip_full_coverage_check, **kwargs)
 
     def __repr__(self):
